@@ -10,7 +10,7 @@ class Board {
   }
 
   getState() {
-    return this.fields.flat();
+    return this.fields;
   }
 
   getBoardUpdates$() {
@@ -20,18 +20,15 @@ class Board {
   }
 
   toggleAtPos([x, y]) {
-    const cell = this.fields[x][y];
-    cell.toggleState();
+    if (!this.isInBounds([x, y])) {
+      throw new Error(`Position ${[x, y]} is out of bounds!`);
+    }
+    this.fields[x][y].toggleState();
     this.pushUpdate();
   }
 
-  toggleBatch(arrOfCells) {
-    arrOfCells.forEach(({ pos: [x, y] }) => {
-      if (this.isInBounds([x, y])) {
-        this.fields[x][y].toggleState();
-      }
-    });
-    this.pushUpdate();
+  isInBounds([x, y]) {
+    return x < this.size && x >= 0 && y < this.size && y >= 0;
   }
 
   pushUpdate() {
@@ -40,18 +37,28 @@ class Board {
     }
   }
 
+  toggleBatch(arrOfCells) {
+    arrOfCells.forEach(({ pos: [x, y] }) => {
+      if (!this.isInBounds([x, y])) {
+        throw new Error(`Position ${[x, y]} is out of bounds!`);
+      }
+      this.fields[x][y].toggleState();
+    });
+    this.pushUpdate();
+  }
+
   killAll() {
     this.forEachField((cell) => cell.kill());
     this.pushUpdate();
   }
 
+  forEachField(callback) {
+    this.fields.forEach((row) => row.forEach((field) => callback(field)));
+  }
+
   resurrectAll() {
     this.forEachField((cell) => cell.resurrect());
     this.pushUpdate();
-  }
-
-  forEachField(callback) {
-    this.fields.forEach((row) => row.forEach((field) => callback(field)));
   }
 
   getFieldNeighbours([x, y]) {
@@ -65,10 +72,6 @@ class Board {
       return null;
     }
     return this.fields[x][y];
-  }
-
-  isInBounds([x, y]) {
-    return x < this.size && x >= 0 && y < this.size && y >= 0;
   }
 
   static generate(size) {

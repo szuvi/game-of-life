@@ -4,17 +4,10 @@ class LifeUpdater {
   constructor(board) {
     this.board = board;
     this.subscription$ = null;
-
-    this.start = this.start.bind(this);
-    this.end = this.end.bind(this);
   }
 
   start(timeGap = 1000) {
     this.subscription$ = interval(timeGap).subscribe(() => this.updateBoard());
-  }
-
-  end() {
-    this.subscription$.unsubscribe();
   }
 
   updateBoard() {
@@ -49,6 +42,12 @@ class LifeUpdater {
 
   static shouldBeResutrected(aliveNeighboursNumber) {
     return aliveNeighboursNumber === 3;
+  }
+
+  end() {
+    if (this.subscription$ != null) {
+      this.subscription$.unsubscribe();
+    }
   }
 }
 

@@ -10,7 +10,7 @@ import Controls from './Controls';
 function BoardContainer() {
   const { size } = useParams();
   const game = useLife(size);
-  const [board, setBoard] = React.useState(() => game.getState());
+  const [board, setBoard] = React.useState(() => game.getState().flat());
   const [started, setStarted] = React.useState(false);
 
   React.useEffect(() => {

@@ -7,13 +7,13 @@ function useLife(initialSize) {
   const updater = React.useMemo(() => new LifeUpdater(myBoard), [myBoard]);
 
   return {
-    getState: () => myBoard.getState(),
-    getBoardUpdates$: () => myBoard.getBoardUpdates$(),
+    getState: () => myBoard.getState(), // returns single current state of Board
+    getBoardUpdates$: () => myBoard.getBoardUpdates$(), // return observable that supplies board state everytime there is a change
     toggleAtPos: (pos) => myBoard.toggleAtPos(pos),
     wipeBoard: () => myBoard.killAll(),
     fillWholeBoard: () => myBoard.resurrectAll(),
-    startUpdates: (time) => updater.start(time),
-    endUpdates: () => updater.end(),
+    startUpdates: (intervalTime) => updater.start(intervalTime), // starts game of life updates
+    endUpdates: () => updater.end(), // ends game of life updates
   };
 }
 
