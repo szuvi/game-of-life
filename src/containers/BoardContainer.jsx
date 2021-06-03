@@ -1,13 +1,14 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { map } from 'rxjs/operators';
+import { useParams } from 'react-router-dom';
 import Cell from '../components/Cell';
 import useLife from '../hooks/useLife';
 import BoardGrid from '../components/BoardGrid';
 import Container from '../components/Container';
 import Controls from './Controls';
 
-function BoardContainer({ size }) {
+function BoardContainer() {
+  const { size } = useParams();
   const game = useLife(size);
   const [board, setBoard] = React.useState(() => game.getState());
   const [started, setStarted] = React.useState(false);
@@ -61,9 +62,5 @@ function BoardContainer({ size }) {
     </Container>
   );
 }
-
-BoardContainer.propTypes = {
-  size: PropTypes.number.isRequired,
-};
 
 export default BoardContainer;

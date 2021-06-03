@@ -1,9 +1,16 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import ClearButton from '../components/ClearButton';
 import Row from '../components/Row';
 
 function Controls({ handleStart, handleStop, handleClear, started }) {
+  const history = useHistory();
+
+  const handleBack = () => {
+    history.goBack();
+  };
+
   return (
     <Row>
       <ClearButton onClick={handleStart} disabled={started}>
@@ -15,6 +22,7 @@ function Controls({ handleStart, handleStop, handleClear, started }) {
       <ClearButton onClick={handleClear} disabled={started}>
         Clear
       </ClearButton>
+      <ClearButton onClick={handleBack}>Back</ClearButton>
     </Row>
   );
 }
