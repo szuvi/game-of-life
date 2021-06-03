@@ -1,7 +1,10 @@
+import { v4 as uuidv4 } from 'uuid';
+
 class Cell {
   constructor(x, y) {
     this.alive = false;
     this.pos = [x, y];
+    this.id = uuidv4();
   }
 
   toggleState() {
