@@ -1,21 +1,36 @@
 import { Observable } from 'rxjs';
 import Cell from './Cell';
+import positionModifiers from './positionModifiers';
 
 class Board {
   constructor(size) {
+    this.size = size;
     this.fields = Board.generate(size);
     this.subscriber = null;
   }
 
-  getBoardState$() {
+  getState() {
+    return this.fields.flat();
+  }
+
+  getBoardUpdates$() {
     return new Observable((subscriber) => {
       this.subscriber = subscriber;
     });
   }
 
-  toggleAtPos(x, y) {
+  toggleAtPos([x, y]) {
     const cell = this.fields[x][y];
-    cell.toggle();
+    cell.toggleState();
+    this.pushUpdate();
+  }
+
+  toggleBatch(arrOfCells) {
+    arrOfCells.forEach(({ pos: [x, y] }) => {
+      if (this.isInBounds([x, y])) {
+        this.fields[x][y].toggleState();
+      }
+    });
     this.pushUpdate();
   }
 
@@ -23,10 +38,6 @@ class Board {
     if (this.subscriber != null) {
       this.subscriber.next(this.fields);
     }
-  }
-
-  getState() {
-    return this.fields;
   }
 
   killAll() {
@@ -43,6 +54,23 @@ class Board {
     this.fields.forEach((row) => row.forEach((field) => callback(field)));
   }
 
+  getFieldNeighbours([x, y]) {
+    return Object.values(positionModifiers)
+      .map((modifier) => this.getCellAtPos(modifier([x, y])))
+      .filter((cell) => cell != null);
+  }
+
+  getCellAtPos([x, y]) {
+    if (!this.isInBounds([x, y])) {
+      return null;
+    }
+    return this.fields[x][y];
+  }
+
+  isInBounds([x, y]) {
+    return x < this.size && x >= 0 && y < this.size && y >= 0;
+  }
+
   static generate(size) {
     const board = [];
     for (let i = 0; i < size; i += 1) {
@@ -51,6 +79,7 @@ class Board {
         board[i][j] = new Cell(i, j);
       }
     }
+    return board;
   }
 }
 
