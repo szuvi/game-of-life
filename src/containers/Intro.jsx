@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '../components/Container';
@@ -10,23 +11,36 @@ function Intro() {
   const history = useHistory();
 
   const handleSubmit = () => {
-    if (typeof size === 'number' && !Number.isNaN(size) && size > 1) {
+    if (
+      typeof size === 'number' &&
+      !Number.isNaN(size) &&
+      size > 1 &&
+      size <= 30
+    ) {
       history.push(`/main/${size}`);
       setError('');
     }
     setError('Incorrect input!');
   };
 
+  const handleKeypress = ({ code }) => {
+    if (code === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   return (
     <Container centered>
-      <p>Input size of Board</p>
       {error.length > 0 && <p style={{ color: 'red' }}>{error} </p>}
+      <label htmlFor="size">Input size (1-30) of Board</label>
       <Input
         id="size"
         type="number"
+        onKeyPress={handleKeypress}
         onChange={(e) => setSize(+e.target.value)}
         value={size}
       />
+
       <ClearButton onClick={handleSubmit}>Enter</ClearButton>
     </Container>
   );
