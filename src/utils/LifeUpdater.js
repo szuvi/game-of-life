@@ -11,8 +11,8 @@ class LifeUpdater {
   }
 
   updateBoard() {
-    const positionsToUpdate = this.getCellsToUpdate();
-    this.board.toggleBatch(positionsToUpdate);
+    const cellsToUpdate = this.getCellsToUpdate();
+    this.board.toggleBatch(cellsToUpdate);
   }
 
   getCellsToUpdate() {
