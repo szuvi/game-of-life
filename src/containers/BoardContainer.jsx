@@ -21,7 +21,7 @@ function BoardContainer() {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [game]);
 
   const handleStart = () => {
     setStarted(true);
