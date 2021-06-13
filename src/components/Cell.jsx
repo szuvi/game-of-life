@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
+import * as React from 'react';
 import styled from 'styled-components';
 
-const Cell = styled.button`
+const StyledCell = styled.button`
   height: 2rem;
   width: 2rem;
   border: 1px solid ${(props) => props.theme.main};
@@ -15,11 +17,27 @@ const Cell = styled.button`
   }
 `;
 
-Cell.defaultProps = {
+StyledCell.defaultProps = {
   alive: false,
   theme: {
     main: '#000',
   },
 };
 
-export default Cell;
+function Cell({ onClick, disabled, alive, pos }) {
+  const handleToggle = () => onClick(pos);
+  return (
+    <StyledCell onClick={handleToggle} disabled={disabled} alive={alive} />
+  );
+}
+
+function MemoizedCell({ onClick, disabled, alive, pos }) {
+  return React.useMemo(
+    () => (
+      <Cell onClick={onClick} disabled={disabled} alive={alive} pos={pos} />
+    ),
+    [onClick, disabled, alive, pos],
+  );
+}
+
+export default MemoizedCell;

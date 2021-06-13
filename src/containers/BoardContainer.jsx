@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { map } from 'rxjs/operators';
 import { useParams } from 'react-router-dom';
-import Cell from '../components/Cell';
+import MemoizedCell from '../components/Cell';
 import useLife from '../hooks/useLife';
 import BoardGrid from '../components/BoardGrid';
 import Container from '../components/Container';
@@ -33,22 +33,26 @@ function BoardContainer() {
     game.endUpdates();
   };
 
-  const handleToggle = (pos) => {
-    game.toggleAtPos(pos);
-  };
-
   const handleClear = () => {
     game.wipeBoard();
   };
+
+  const handleToggle = React.useCallback(
+    (pos) => {
+      game.toggleAtPos(pos);
+    },
+    [game],
+  );
 
   return (
     <Container centered>
       <BoardGrid size={size}>
         {board.map((cell) => (
-          <Cell
-            onClick={() => handleToggle(cell.pos)}
+          <MemoizedCell
+            onClick={handleToggle}
             disabled={started}
             key={cell.id}
+            pos={cell.pos}
             alive={cell.alive}
           />
         ))}
