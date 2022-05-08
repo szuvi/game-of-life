@@ -1,38 +1,33 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import * as React from 'react';
-import { useHistory } from 'react-router-dom';
-import Container from '../components/Container';
-import ClearButton from '../components/ClearButton';
-import Input from '../components/Input';
+import * as React from "react";
+import { useHistory } from "react-router-dom";
+import Container from "../components/Container";
+import ClearButton from "../components/ClearButton";
+import Input from "../components/Input";
 
 function Intro() {
-  const [size, setSize] = React.useState('');
-  const [error, setError] = React.useState('');
+  const [size, setSize] = React.useState("");
+  const [error, setError] = React.useState("");
   const history = useHistory();
 
   const handleSubmit = () => {
-    if (
-      typeof size === 'number' &&
-      !Number.isNaN(size) &&
-      size > 1 &&
-      size <= 30
-    ) {
+    if (typeof size === "number" && !Number.isNaN(size)) {
       history.push(`/main/${size}`);
-      setError('');
+      setError("");
     }
-    setError('Incorrect input!');
+    setError("Incorrect input!");
   };
 
   const handleKeypress = ({ code }) => {
-    if (code === 'Enter') {
+    if (code === "Enter") {
       handleSubmit();
     }
   };
 
   return (
     <Container centered>
-      {error.length > 0 && <p style={{ color: 'red' }}>{error} </p>}
-      <label htmlFor="size">Input size (1-30) of Board</label>
+      {error.length > 0 && <p style={{ color: "red" }}>{error} </p>}
+      <label htmlFor="size">Input size of the Board</label>
       <Input
         id="size"
         type="number"
