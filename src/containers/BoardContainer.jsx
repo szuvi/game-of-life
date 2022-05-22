@@ -25,7 +25,7 @@ function BoardContainer() {
 
   const handleStart = () => {
     setStarted(true);
-    game.startUpdates(100);
+    game.startUpdates(10);
   };
 
   const handleStop = () => {
